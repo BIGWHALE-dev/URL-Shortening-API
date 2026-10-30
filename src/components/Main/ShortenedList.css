@@ -14,7 +14,7 @@
   /* max-width: 100%; */
 }
 
-.enterdLink {
+.enteredLink {
   color: var(--Gray-950);
   padding-inline: 1em;
   overflow: hidden;

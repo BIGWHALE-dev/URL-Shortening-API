@@ -12,7 +12,7 @@ function MainSection() {
 
   function linksData(data) {
     const link = { ...data, id: crypto.randomUUID() };
-    setStoredLinks((prevs) => [link, ...prevs]);
+    setStoredLinks((prev) => [link, ...prev]);
   }
 
   useEffect(() => {
@@ -23,7 +23,7 @@ function MainSection() {
     <section className="main-section">
       <Container className="main-section_container">
         <SearchBar onReceiveShortLink={linksData} />
-        <ShortenList datas={storedLinks} />
+        <ShortenList data={storedLinks} />
         <div className="section-intro__container">
           <h2>Advanced Statistics</h2>
           <p className="subtitle">

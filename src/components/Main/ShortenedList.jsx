@@ -20,10 +20,10 @@ function ShortenList(prop) {
   }
   return (
     <div className="lists__container">
-      {prop.datas.map((data, i) => {
+      {prop.data.map((data, i) => {
         return (
           <li className="shortenedList" key={data.id}>
-            <p className="enterdLink">{data.inputLink}</p>
+            <p className="enteredLink">{data.inputLink}</p>
 
             <hr className="list-hr" />
 

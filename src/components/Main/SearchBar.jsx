@@ -18,33 +18,47 @@ function SearchBar(prop) {
         "i", // fragment locator
       );
 
-      if (!urlPattern.test(inputLink)) {
-        setErrMessage("Enter a valid link");
-        return;
-      }
-      if (!inputLink) {
+      if (!inputLink.trim()) {
         setErrMessage("Please add a link");
         return;
       }
 
-      const res = await fetch(
-        "https://cors-anywhere.com/" + "https://cleanuri.com/api/v1/shorten",
-        {
-          method: "POST",
-          headers: { "content-Type": "application/x-www-form-urlencoded" },
-          body: new URLSearchParams({ url: inputLink }),
-        },
-      );
+      if (!urlPattern.test(inputLink.trim())) {
+        setErrMessage("Enter a valid link");
+        return;
+      }
 
-      if (!res.ok)
-        throw new Error(`Unable to shorten link, try again (${res.status})`);
+      const apiUrl =
+        import.meta.env.VITE_API_URL || "http://localhost:3000/api";
+      const res = await fetch(apiUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: inputLink.trim() }),
+      });
 
       const data = await res.json();
-      const shortenedResult = data.result_url;
+
+      if (!res.ok) {
+        throw new Error(
+          data.error || `Unable to shorten link, try again (${res.status})`,
+        );
+      }
+
+      const shortenedResult = data.shorturl;
+      if (typeof shortenedResult !== "string") {
+        throw new Error(
+          "The URL shortening service returned an invalid response.",
+        );
+      }
+
       prop.onReceiveShortLink({ inputLink, shortenedResult });
       setInputLink("");
     } catch (err) {
-      console.error(err.message);
+      setErrMessage(
+        err instanceof Error
+          ? err.message
+          : "Unable to shorten link, please try again.",
+      );
     }
   }
 
